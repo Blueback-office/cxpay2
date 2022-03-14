@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="payment_icon_cc_cxpay" model="payment.icon">
+            <field name="name">Cx-PAy Icon</field>
+            <field name="image" type="base64" file="payment_cxpay/static/description/icon_payment.png"/>
+            <field name="is_cx_pay">True</field>
+        </record>
+
+        <record id="payment_acquirer_cxpay" model="payment.acquirer">
+            <field name="name">CX-pay</field>
+            <field name="display_as">Credit Card (powered by CX pay)</field>
+            <field name="sequence">3</field>
+            <field name="module_id" ref="base.module_payment_cxpay"/>
+            <field name="description" type="html">
+                <p>
+                    A payment gateway to accept online payments via credit cards and e-checks.
+                </p>
+                <ul class="list-inline">
+                    <li class="list-inline-item"><i class="fa fa-check"/>Online Payment</li>
+                    <li class="list-inline-item"><i class="fa fa-check"/>Payment Status Tracking</li>
+                    <li class="list-inline-item"><i class="fa fa-check"/>Subscriptions</li>
+                    <li class="list-inline-item"><i class="fa fa-check"/>Save Cards</li>
+                    <li class="list-inline-item"><i class="fa fa-check"/>Manual Capture</li>
+                    <li class="list-inline-item"><i class="fa fa-check"/>Embedded Credit Card Form</li>
+                </ul>
+            </field>
+            <!-- https://www.authorize.net/solutions/merchantsolutions/onlinemerchantaccount/ -->
+            <field name="payment_icon_ids" eval='[(6, 0, [ref("payment_cxpay.payment_icon_cc_cxpay")])]'/>
+            <field name="image_128" type="base64" file="payment_cxpay/static/description/icon.png"/>
+            <field name="provider">cxpay</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="view_template_id" ref="cxpay_form"/>
+            <field name="registration_view_template_id" ref="cxpay_s2s_form"/>
+            <field name="payment_flow">s2s</field>
+        </record>
+
+
+    </data>
+</odoo>

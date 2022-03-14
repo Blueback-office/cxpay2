@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <template id="pay_with_confirmation" name="Payment Methods">
+            <t t-call="portal.frontend_layout">
+                <t t-set="additional_title">Add New Credit card</t>
+                <div class="wrap">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb mt8">
+                                    <li class="breadcrumb-item"><a href="/shop/payment">Back</a></li>
+                                    <li class="breadcrumb-item active" >Payment Methods</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center h-100">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Card Confirmation</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form t-att-action="url" method="POST">
+                                        <div class="input-group form-group">
+                                            <input type="text" class="form-control" name="billing-cc-number" placeholder="Card Number" t-att-value="cc_number" />
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <input type="text" class="form-control" name="billing-cc-exp" placeholder="Date" t-att-value="exp_date" />
+                                        </div>
+                                        <div class="input-group form-group">
+                                            <input type="text" class="form-control" name="cvv" placeholder="cvv" t-att-value="cvv_no" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Verify" class="btn btn-primary" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="cxpay_form">
+            <div>
+                <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
+                <input type="hidden" name='x_login' t-att-value='x_login'/>
+                <input type="hidden" name='x_fp_hash' t-att-value='x_fp_hash'/>
+                <input type="hidden" name='x_amount' t-att-value='x_amount'/>
+                <input type="hidden" name='x_show_form' t-att-value="x_show_form"/>
+                <input type="hidden" name='x_type' t-att-value="x_type"/>
+                <input type="hidden" name='x_method' t-att-value="x_method"/>
+                <input type="hidden" name='x_fp_sequence' t-att-value='x_fp_sequence'/>
+                <input type="hidden" name='x_version' t-att-value="x_version"/>
+                <input type="hidden" name="x_relay_response" t-att-value="x_relay_response"/>
+                <input type="hidden" name="x_relay_url" t-att-value="x_relay_url"/>
+                <input type="hidden" name="x_fp_timestamp" t-att-value="x_fp_timestamp"/>
+                <input type="hidden" name='return_url' t-att-value="returndata"/>
+                <input type="hidden" name='x_cancel_url' t-att-value="x_cancel_url"/>
+                <!--Order Information -->
+                <input type="hidden" name='x_invoice_num' t-att-value='reference'/>
+                <input type="hidden" name='x_currency_code' t-att-value='x_currency_code'/>
+                <!-- Billing Information-->
+                <input type="hidden" name='x_first_name' t-att-value="billing_first_name"/>
+                <input type="hidden" name='x_last_name' t-att-value="billing_last_name"/>
+                <input type="hidden" name="x_company" t-att-value="billing_partner_commercial_company_name"/>
+                <input type="hidden" name='x_address' t-att-value="billing_address"/>
+                <input type="hidden" name='x_city' t-att-value="billing_city"/>
+                <input type="hidden" name='x_zip' t-att-value="billing_zip_code"/>
+                <input type="hidden" name='x_country' t-att-value="billing_country"/>
+                <input type="hidden" name='x_phone' t-att-value='billing_phone'/>
+                <input type="hidden" name='x_email' t-att-value="billing_email"/>
+                <input type="hidden" name='x_state' t-att-value="billing_state"/>
+                <!-- Shipping Information-->
+                <input type="hidden" name='x_ship_to_first_name' t-att-value="first_name"/>
+                <input type="hidden" name='x_ship_to_last_name' t-att-value="last_name"/>
+                <input type="hidden" name='x_ship_to_address' t-att-value="address"/>
+                <input type="hidden" name='x_ship_to_city' t-att-value="city"/>
+                <input type="hidden" name='x_ship_to_zip' t-att-value="zip_code"/>
+                <input type="hidden" name='x_ship_to_country' t-att-value="country"/>
+                <input type="hidden" name='x_ship_to_phone' t-att-value='phone'/>
+                <input type="hidden" name='x_ship_to_email' t-att-value="email"/>
+                <input type="hidden" name='x_ship_to_state' t-att-value="state"/>
+            </div>
+        </template>
+
+        <template id="payment_authorize_redirect" name="Payment Authorize">
+            <script type="text/javascript">
+                window.location.href = '<t t-esc="return_url"/>';
+            </script>
+        </template>
+
+        <template id="cxpay_s2s_form">
+            <input type="hidden" name="data_set" data-create-route="/payment/cx_pay/s2s/create_json_3ds"/>
+            <div t-attf-class="row mt8 #{'' if bootstrap_formatting else 'o_card_brand_detail'}">
+                <div t-att-class="'form-group col-lg-12' if bootstrap_formatting else 'form-group'">
+                    <input type="tel" name="cc_number" id="cc_number" class="form-control" placeholder="Card number" data-is-required="true"/>
+                    <div class="card_placeholder"></div>
+                    <div class="visa"></div>
+                    <input type="hidden" name="cc_brand" value=""/>
+                </div>
+                <div t-att-class="'form-group col-lg-5' if bootstrap_formatting else 'form-group'">
+                    <input type="text" name="cc_holder_name" id="cc_holder_name" class="form-control" placeholder="Cardholder name" data-is-required="true"/>
+                </div>
+                <div t-att-class="'form-group col-lg-3' if bootstrap_formatting else 'form-group'">
+                    <input type="text" name="cc_expiry" id="cc_expiry" class="form-control" maxlength="7" placeholder="Expires (MM / YY)" data-is-required="true"/>
+                </div>
+                <div t-att-class="'form-group col-lg-4' if bootstrap_formatting else 'form-group'">
+                    <input type="text" name="cc_cvc" id="cc_cvc" class="form-control" maxlength="4" placeholder="CVC" data-is-required="true"/>
+                </div>
+            </div>
+            <input type="hidden" name="acquirer_id" t-att-value="id"/>
+            <input class="d-none" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <input t-if="return_url" type="hidden" name="return_url" t-att-value="return_url"/>
+            <input t-if="partner_id" type="hidden" name="partner_id" t-att-value="partner_id"/>
+        </template>
+
+        <template id="payment_tokens_list" name="Payment Token List" inherit_id="payment.payment_tokens_list">
+            <xpath expr="//ul[hasclass('payment_icon_list')]/t[@t-foreach='acq.payment_icon_ids']" position="replace">
+                <t t-foreach="acq.payment_icon_ids" t-as="pm_icon">
+                    <li t-attf-class="list-inline-item#{'' if (i &lt; MAX_BRAND_LINE) else ' d-none'}">
+                        <t t-if="pm_icon.is_cx_pay">
+                            <img src="https://cxpay.global/wp-content/uploads/2017/10/cx_pay-3DS-1.png" class="img img-fluid o_we_selected_image" alt="Cx-PAy Icon" style="width: 300px;"/>
+                        </t>
+                        <t t-else="0">
+                            <span t-field="pm_icon.image"
+                                t-options='{"widget": "image", "alt-field": "name"}'/>
+                        </t>
+                    </li>
+                    <li t-if="i==MAX_BRAND_LINE" style="display:block;" class="list-inline-item">
+                        <span class="float-right more_option text-info">
+                            <a href="#" class="o_payment_form_pay_icon_more" data-toggle="tooltip" t-att-title="', '.join([opt.name for opt in acq.payment_icon_ids[MAX_BRAND_LINE:]])">and more</a>
+                        </span>
+                    </li>
+                    <t t-set="i" t-value="i+1"/>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>
